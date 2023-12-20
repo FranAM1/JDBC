@@ -2,9 +2,8 @@ public class Hotel {
     private int id;
     private String name;
 
-    public Hotel(int id, String name) {
+    public Hotel(int id) {
         this.id = id;
-        this.name = name;
     }
 
     public int getId() {

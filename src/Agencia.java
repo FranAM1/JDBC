@@ -2,9 +2,8 @@ public class Agencia {
     private int id;
     private String name;
 
-    public Agencia(int id, String name) {
+    public Agencia(int id) {
         this.id = id;
-        this.name = name;
     }
 
     public int getId() {

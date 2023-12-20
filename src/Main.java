@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        XMLReader xmlReader = new XMLReader("bookings.xml");
         boolean exit = false;
         String opcion = "";
 
@@ -14,6 +15,7 @@ public class Main {
 
             switch (opcion) {
                 case "1":
+                    xmlReader.readLoadXML();
                     break;
                 case "2":
                     break;

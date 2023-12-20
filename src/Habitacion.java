@@ -2,9 +2,8 @@ public class Habitacion {
     private int id;
     private String tipo;
 
-    public Habitacion(int id, String name) {
+    public Habitacion(int id) {
         this.id = id;
-        this.tipo = name;
     }
 
     public int getId() {
