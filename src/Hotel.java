@@ -1,9 +1,25 @@
+import java.util.ArrayList;
+
 public class Hotel {
     private int id;
     private String name;
 
     public Hotel(int id) {
         this.id = id;
+    }
+
+    public void checkDuplicates(ArrayList<Hotel> hoteles) {
+        if (hoteles.isEmpty()) {
+            hoteles.add(this);
+            return;
+        }
+
+        for (Hotel hotel : hoteles) {
+            if (hotel.getId() == this.id) {
+                return;
+            }
+        }
+        hoteles.add(this);
     }
 
     public int getId() {
