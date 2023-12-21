@@ -7,7 +7,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Array;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -144,8 +143,24 @@ public class XMLReader extends DefaultHandler {
         dbConnection.deleteData();
     }
 
-    public void findBooking(int id) {
-        dbConnection.findBookingByID(id);
+    public void insertBooking(Reserva reserva) {
+        dbConnection.insertBooking(reserva);
+    }
+
+    public boolean findBooking(int id) {
+        return dbConnection.findBookingByID(id);
+    }
+
+    public void findBookingsByAgency(int id) {
+        dbConnection.findBookingsByAgency(id);
+    }
+
+    public void deleteBooking(int id) {
+        dbConnection.deleteBookingByID(id);
+    }
+
+    public void updateBooking(Reserva reserva) {
+        dbConnection.updateBookingByID(reserva);
     }
 
     public ArrayList<Hotel> getHotels() {

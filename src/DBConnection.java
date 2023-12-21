@@ -18,7 +18,8 @@ public class DBConnection {
         }
     }
 
-    public void findBookingByID(int id){
+    public boolean findBookingByID(int id){
+        boolean found = false;
         connect();
         String query = "SELECT * FROM reserva WHERE id = ?";
         try {
@@ -39,6 +40,7 @@ public class DBConnection {
                 findHotelByID(rs.getInt("id_hotel"));
                 System.out.println("-HABITACION-");
                 findRoomByID(rs.getInt("id_habitacion"));
+                found = true;
             }else{
                 System.out.println("No se ha encontrado ninguna reserva con ese id");
             }
@@ -47,6 +49,7 @@ public class DBConnection {
         }finally {
             closeConnection();
         }
+        return found;
     }
 
     public void findClientByID(int id){
@@ -173,6 +176,87 @@ public class DBConnection {
 
     }
 
+    public void insertBooking(Reserva reserva){
+        connect();
+        String query = "INSERT INTO reserva(precio, check_in, noches, id_cliente, id_agencia, id_hotel, id_habitacion) " +
+                "VALUES(?,?,?,?,?,?,?)";
+        try {
+            pstmt = conn.prepareStatement(query);
+            pstmt.setDouble(1, reserva.getPrecio());
+            pstmt.setDate(2, reserva.getCheck_in());
+            pstmt.setInt(3, reserva.getNoches());
+            pstmt.setInt(4, reserva.getCliente().getId());
+            pstmt.setInt(5, reserva.getAgencia().getId());
+            pstmt.setInt(6, reserva.getHotel().getId());
+            pstmt.setInt(7, reserva.getHabitacion().getId());
+            pstmt.executeUpdate();
+            System.out.println("Reserva insertada correctamente");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            closeConnection();
+        }
+
+    }
+
+    public void updateBookingByID(Reserva reserva){
+        connect();
+        String query = "UPDATE reserva SET precio = ?, check_in = ?, noches = ?, id_cliente = ?, id_agencia = ?, " +
+                "id_hotel = ?, id_habitacion = ? WHERE id = ?";
+
+        try {
+            pstmt = conn.prepareStatement(query);
+            pstmt.setDouble(1, reserva.getPrecio());
+            pstmt.setDate(2, reserva.getCheck_in());
+            pstmt.setInt(3, reserva.getNoches());
+            pstmt.setInt(4, reserva.getCliente().getId());
+            pstmt.setInt(5, reserva.getAgencia().getId());
+            pstmt.setInt(6, reserva.getHotel().getId());
+            pstmt.setInt(7, reserva.getHabitacion().getId());
+            pstmt.setInt(8, reserva.getId());
+            pstmt.executeUpdate();
+            System.out.println("Reserva actualizada correctamente");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            closeConnection();
+        }
+    }
+
+    public void findBookingsByAgency(int id){
+        connect();
+        String query = "SELECT * FROM reserva WHERE id_agencia = ?";
+
+        try{
+            pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (!rs.next()) {
+                System.out.println("No se ha encontrado ninguna reserva con esa agencia");
+                return;
+            }
+            while(rs.next()){
+                System.out.println("-----RESERVA-----");
+                System.out.println("Id: " + rs.getInt("id"));
+                System.out.println("Precio: " + rs.getDouble("precio"));
+                System.out.println("Check in: " + rs.getDate("check_in"));
+                System.out.println("Noches: " + rs.getInt("noches"));
+                System.out.println("-CLIENTE-");
+                findClientByID(rs.getInt("id_cliente"));
+                System.out.println("-AGENCIA-");
+                findAgencyByID(rs.getInt("id_agencia"));
+                System.out.println("-HOTEL-");
+                findHotelByID(rs.getInt("id_hotel"));
+                System.out.println("-HABITACION-");
+                findRoomByID(rs.getInt("id_habitacion"));
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }finally {
+            closeConnection();
+        }
+    }
+
     public void insertAgencies(ArrayList<Agencia> agencias){
         connect();
         String query = "INSERT INTO agencia(id, nombre) VALUES(?,?)";
@@ -255,6 +339,23 @@ public class DBConnection {
         }
 
     }
+
+    public void deleteBookingByID(int id){
+        connect();
+        String query = "DELETE FROM reserva WHERE id = ?";
+        try {
+            pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+            System.out.println("Reserva eliminada correctamente");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            closeConnection();
+        }
+    }
+
+
 
     private void closeConnection(){
         try {
